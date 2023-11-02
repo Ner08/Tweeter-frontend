@@ -23,8 +23,8 @@ const iconMore: string = 'bi-three-dots'
 <template>
     <div class="container-fluid">
         <div class="row flex-nowrap">
-            <div class="col-auto col-md-2 col-lg-2 col-xl-2 col-xxl-3 px-sm-1 bg-black custom-border-right overflow-auto">
-                <div class="d-flex flex-column align-items-center align-items-sm-end px-3 pt-2 text-white min-vh-100">
+            <div class="col-auto col-md-2 col-lg-2 col-xl-2 col-xxl-3 bg-black custom-border-right overflow-auto">
+                <div class="d-flex flex-column align-items-center align-items-sm-end min-vh-100">
                     <TwitterIcon />
                     <ul class="nav flex-column align-items-center align-items-sm-end" id="menu">
                         <SideBarItem :iconName="iconHome" />
@@ -39,7 +39,8 @@ const iconMore: string = 'bi-three-dots'
                         <SideBarItem :iconName="iconMore" />
                     </ul>
                     <hr>
-                    <div class="dropdown pb-1">
+                    <div class="m-auto"></div>
+                    <div class="dropdown pb-3">
                         <a href="#"
                             class="d-flex align-items-center text-white btn btn btn-outline-secondary border-0 rounded-pill outline-none"
                             id="dropdownUser1" data-bs-toggle="dropdown">

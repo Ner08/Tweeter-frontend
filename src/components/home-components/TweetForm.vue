@@ -26,7 +26,7 @@ const toggleSelect = () => {
                     class="bi bi-globe"></i>Everyone can reply</p>
             <div class="d-flex justify-content-end px-3 pb-3">
                 <IconForm :class="iconImg" />
-                <span class="buttonPressed p-1 px-2 rounded-circle"><i class="bi h6 text-primary"><svg
+                <span class="iButton"><i class="bi h6 text-primary"><svg
                             xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-filetype-gif" viewBox="0 0 16 16">
                             <path fill-rule="evenodd"
@@ -37,7 +37,7 @@ const toggleSelect = () => {
                 <IconForm :class="iconCalandar" class="d-none d-sm-inline" />
                 <IconForm :class="iconLocation" class="d-none d-sm-inline" />
                 <i class="post"></i>
-                <i class="btn btn-primary rounded-pill px-3">Post</i>
+                <button class="btn btn-primary rounded-pill px-3">Post</button>
             </div>
         </div>
     </div>
@@ -61,8 +61,14 @@ textarea {
     margin-left: auto;
 }
 
-.buttonPressed:hover {
-    background-color: rgb(30, 30, 30);
+.iButton:hover {
+    background-color: rgb(8, 10, 26);
+}
+.iButton{
+    border-radius: 100%;
+    padding: 0px 7px 0px 7px;
+    margin: 9px 2px 0 2px ;
+    cursor: pointer;
 }
 
 textarea {
