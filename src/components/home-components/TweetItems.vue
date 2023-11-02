@@ -8,7 +8,7 @@ const tweets = ref<[any]>();
 const getData = () => getAPI("tweets").then(
     (res) => {
         if (res.status === 200) {
-            tweets.value = res.data;
+            tweets.value = res.data.data;
             console.log("all tweets:", tweets.value)
         }
         else (console.log(res))

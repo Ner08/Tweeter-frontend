@@ -6,7 +6,7 @@ import TweetItems from '@/components/home-components/TweetItems.vue';
 </script>
 
 <template>
-  <div class="col col-md-6 col-sm-12 col-12 bg-black h-25 px-0 custom-border ">
+  <div class="col col-md-6 col-sm-12 col-12 bg-black px-0 custom-border column">
     <NavTabs />
     <TweetForm/>
     <TweetItems/>

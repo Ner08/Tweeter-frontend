@@ -23,7 +23,7 @@ const iconMore: string = 'bi-three-dots'
 <template>
     <div class="container-fluid">
         <div class="row flex-nowrap">
-            <div class="col-auto col-md-2 col-lg-2 col-xl-2 col-xxl-3 bg-black custom-border-right overflow-auto">
+            <div class="col-auto col-md-2 col-lg-2 col-xl-2 col-xxl-3 bg-black custom-border-right column ">
                 <div class="d-flex flex-column align-items-center align-items-sm-end min-vh-100">
                     <TwitterIcon />
                     <ul class="nav flex-column align-items-center align-items-sm-end" id="menu">
@@ -42,7 +42,7 @@ const iconMore: string = 'bi-three-dots'
                     <div class="m-auto"></div>
                     <div class="dropdown pb-3">
                         <a href="#"
-                            class="d-flex align-items-center text-white btn btn btn-outline-secondary border-0 rounded-pill outline-none"
+                            class="d-flex align-items-center text-white btn btn btn-outline-secondary border-0 rounded-pill outline-none "
                             id="dropdownUser1" data-bs-toggle="dropdown">
                             <img src="https://github.com/mdo.png" alt="avatar" width="40" height="40"
                                 class="rounded-circle">
@@ -63,7 +63,7 @@ const iconMore: string = 'bi-three-dots'
             </div>
 
             <slot />
-            <div class="col d-none d-sm-block border-white">
+            <div class="col d-none d-sm-block border-white overflow-auto ">
 
             </div>
         </div>

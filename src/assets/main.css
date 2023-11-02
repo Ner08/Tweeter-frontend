@@ -1,4 +1,8 @@
-@import "./base.css";
+@import './base.css';
+
+:root {
+  color-scheme: dark;
+}
 
 .selector-for-some-widget {
   box-sizing: content-box;
@@ -6,5 +10,32 @@
 
 body {
   height: 100%;
-  overflow: hidden;
+}
+
+.column {
+  height: 100vh;
+  overflow-y: auto;
+}
+
+[data-title]:hover:after {
+  opacity: 1;
+  transition: all 0.1s ease 0.5s;
+  visibility: visible;
+}
+[data-title]:after {
+  content: attr(data-title);
+  background-color: #28273d;
+  color: #ffffff;
+  font-size: 0.8em;
+  position: absolute;
+  padding: 1px 5px 1px 5px;
+  bottom: -1.6em;
+  white-space: nowrap;
+  border-radius: 4px;
+  opacity: 0;
+  z-index: 99999;
+  visibility: hidden;
+}
+[data-title] {
+  position: relative;
 }

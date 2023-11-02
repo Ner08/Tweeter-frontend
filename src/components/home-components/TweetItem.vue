@@ -14,12 +14,18 @@ const img: string = '';
 
 export interface Tweet {
     id: number
-    timestamp: Date
+    userName: string
+    name: string
+    created_at: Date
+    updated_at: Date
+    createdAgo: string
     message: string
     img?: string
     user_id: number
     shareUrl?: string
     like: number
+    shares: number
+    views: number
     numOfComments: number
 }
 
@@ -27,7 +33,6 @@ const props = defineProps({
     tweet: {
         type: Object as PropType<Tweet>,
         required: true
-
     }
 })
 
@@ -39,17 +44,17 @@ const props = defineProps({
         <div class="d-flex">
             <ProfileIcon />
             <div class="card-body">
-                <span class="card-text">{{ props.tweet.user_id }}</span>
-                <span class="card-text mx-1 dark">@Nero</span>
+                <span class="card-text">{{ props.tweet.name }}</span>
+                <span class="card-text mx-1 dark">@{{props.tweet.userName}}</span>
                 <i class="dark">‧</i>
-                <span class="card-text mx-2 dark"><small>3 mins</small></span>
+                <span class="card-text mx-2 dark"><small>{{ props.tweet.createdAgo }}</small></span>
                 <p class="card-text mb-2">{{ props.tweet.message }}</p>
                 <img v-if="img !== ''" src="../../assets/images/image.jpeg" class="card-img-bottom rounded-4" alt="...">
                 <div class="d-flex justify-content-between pt-1">
                     <TweeterItemIcon :icon="iconComment" :num="props.tweet.numOfComments" />
-                    <TweeterItemIcon :icon="iconRetweet" :num="5" class="h5" />
-                    <TweeterItemIcon :icon="iconFavorite" :num="23" />
-                    <TweeterItemIcon :icon="iconViews" :num="150" />
+                    <TweeterItemIcon :icon="iconRetweet" :num="props.tweet.shares" class="h5" />
+                    <TweeterItemIcon :icon="iconFavorite" :num="props.tweet.like" />
+                    <TweeterItemIcon :icon="iconViews" :num="props.tweet.views" />
                     <span class="d-flex justify-content-end">
                         <TweeterItemIcon :icon="iconBookmark" class="mx-2" />
                         <TweeterItemIcon :icon="iconDowload" class="mx-2 d-none d-sm-inline" />
