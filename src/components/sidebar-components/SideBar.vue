@@ -25,8 +25,11 @@ const iconMore: string = 'bi-three-dots'
         <div class="row flex-nowrap">
             <div class="col-2 col-md-2 col-lg-2 col-xl-3 col-xxl-3 bg-black custom-border-right column ">
                 <div class="d-flex flex-column align-items-center align-items-sm-end min-vh-100">
-                    <TwitterIcon />
+
+                    <!-- Sidebar Icons -->
+                    
                     <ul class="nav flex-column align-items-center align-items-sm-end" id="menu">
+                        <TwitterIcon />
                         <SideBarItem :iconName="iconHome" />
                         <SideBarItem :iconName="iconSearch" />
                         <SideBarItem :iconName="iconNotifications" />
@@ -40,6 +43,8 @@ const iconMore: string = 'bi-three-dots'
                     </ul>
                     <hr>
                     <div class="m-auto"></div>
+
+                    <!-- User Icon and Name with Dropdown -->
                     <div class="dropdown pb-3">
                         <a href="#"
                             class="d-flex align-items-center text-white btn btn btn-outline-secondary border-0 rounded-pill outline-none "
@@ -62,7 +67,10 @@ const iconMore: string = 'bi-three-dots'
                 </div>
             </div>
 
+            <!-- Slot -->
             <slot />
+
+            <!-- Right Column -->
             <div class="col d-none d-sm-block border-white overflow-auto ">
 
             </div>

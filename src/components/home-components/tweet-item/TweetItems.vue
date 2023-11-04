@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import TweetItem from './tweet-item/TweetItem.vue';
-import {getAPI} from '../../helpers/apiGet'
+import TweetItem from './TweetItem.vue';
+import {getAPI} from '../../../helpers/apiGet'
 import { ref } from 'vue';
 
 const tweets = ref<[any]>();
