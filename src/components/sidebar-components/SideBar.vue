@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import SideBarItem from './SideBarItem.vue';
-import TwitterIcon from './TwitterIcon.vue'
+import TwitterIcon from './icons/TwitterIcon.vue';
 
 const iconHome: string = 'bi-house-door-fill';
 const iconSearch: string = 'bi-search';
@@ -23,7 +23,7 @@ const iconMore: string = 'bi-three-dots'
 <template>
     <div class="container-fluid">
         <div class="row flex-nowrap">
-            <div class="col-auto col-md-2 col-lg-2 col-xl-2 col-xxl-3 bg-black custom-border-right column ">
+            <div class="col-2 col-md-2 col-lg-2 col-xl-3 col-xxl-3 bg-black custom-border-right column ">
                 <div class="d-flex flex-column align-items-center align-items-sm-end min-vh-100">
                     <TwitterIcon />
                     <ul class="nav flex-column align-items-center align-items-sm-end" id="menu">

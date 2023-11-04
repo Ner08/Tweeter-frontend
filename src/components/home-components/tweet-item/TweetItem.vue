@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { type PropType } from 'vue'
-import ProfileIcon from '../other/ProfileIcon.vue';
+import ProfileIcon from '@/components/other/ProfileIcon.vue';
 import TweeterItemIcon from './TweeterItemIcon.vue';
 
 const iconComment: string = "bi bi-chat";

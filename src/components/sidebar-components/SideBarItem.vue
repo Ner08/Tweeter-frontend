@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SideBarIcon from './SideBarIcon.vue';
+import SideBarIcon from './icons/SideBarIcon.vue';
 import { RouterLink } from 'vue-router'
 
 defineProps<{

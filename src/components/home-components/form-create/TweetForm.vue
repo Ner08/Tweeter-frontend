@@ -2,58 +2,69 @@
 import { ref, computed } from 'vue';
 import IconForm from './IconForm.vue'
 import IconFormFileUpload from './IconFormFileUpload.vue';
-import ProfileIcon from '../other/ProfileIcon.vue';
-import { fileURLToPath } from 'node:url';
-import { postAPI } from '../../helpers/apiPost'
+import ProfileIcon from '@/components/other/ProfileIcon.vue';
+import { postAPI } from '../../../helpers/apiPost'
 
 let selected = ref<boolean>(false)
+const isImage = ref<boolean>(false)
+const isVideo = ref<boolean>(false)
+const file = ref<any>(null);
+const fileUrl = ref<string>("");
+const message = ref<string>("");
+/* const userId = ref<number>(1) */
+
 
 const iconImg: string = 'bi-image';
 const iconPoll: string = 'bi-bar-chart';
 const iconEmoji: string = 'bi-emoji-smile';
-const iconCalandar: string = 'bi-calendar-day';
+const iconCalendar: string = 'bi-calendar-day';
 const iconLocation: string = 'bi-geo-alt';
 
 const toggleSelect = () => {
     selected.value = true;
 }
 
-const isFile = ref<boolean>(false)
-const file = ref<fileURLToPath | null>(null);
-const fileUrl = ref<fileURLToPath | null>(null)
+const onChange = (event: any) => {
+    toggleSelect();
+    isImage.value = false
+    isVideo.value = false
+    file.value = event.target.files[0];
+    fileUrl.value = URL.createObjectURL(file.value)
 
-
-const uploadFile = (event: any) => {
-    const tmp = event.target.files[0];
-    file.value = tmp
-    fileUrl.value = URL.createObjectURL(tmp)
-    isFile.value = true
-
-    console.log("FileURL: ", fileUrl.value)
-
-    console.log("File: ", file.value)
-    console.log("Is File: ", isFile.value)
+    let fileMime = computed(() => file.value?.type);
+    if (fileMime.value == "image/png" || fileMime.value == "image/jpg" || fileMime.value == "image/jpeg") {
+        isImage.value = true
+    } else if (fileMime.value == "video/mp4" || fileMime.value == "image/x-m4v") {
+        isVideo.value = true
+    }
 };
 
-const submit = async () => {
-    const reader: fileURLToPath | null = new FileReader();
-    reader.readAsDataURL(file.value);
-    reader.onload = async () => {
-        const encodedFile = reader.result.split(",")[1];
-        let form = new FormData();
-        form.set('img', encodedFile);
-        const data = {
-            img: encodedFile,
-        };
-        try {
-            const endpoint = "tweets";
-            const response = ""; //axios
-            console.log();
-        } catch (error) {
-            console.error(error);
+const postData = (data: FormData) => postAPI("tweets", data).then(
+    (res) => {
+        if (res.status === 200) {
+            file.value = null;
+            isImage.value = false;
+            isVideo.value = false;
+            fileUrl.value = "";
+            message.value = "";
         }
-    };
-}
+        else {
+            console.log("Error: ", res)
+        }
+    }
+)
+
+const submit = async () => {
+    let form = new FormData();
+    if (isImage.value) {
+        form.append('img', file.value);
+    }
+    form.append('message', message.value);
+    form.append('user_id', "1");
+
+    await postData(form)
+};
+
 </script>
 
 
@@ -61,13 +72,29 @@ const submit = async () => {
     <div class="d-flex align-items-start">
         <ProfileIcon />
         <div class="container">
-            <form method="POST" enctype="multipart/form-data">
-                <img v-if="isFile" :src="fileUrl.value" class="w-75 mt-4 mx-3" />
+            <!-- <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            </div> -->
+            <form enctype="multipart/form-data" @submit.prevent="submit">
                 <textarea @click="toggleSelect" class="d-inline m-2 form-control-lg w-95 rounded-0" rows="1" type="text"
-                    name="message" placeholder="What is happening?!" id="exampleFormControlTextarea1"></textarea>
+                    v-model="message" placeholder="What is happening?!"></textarea>
+
+                <!-- Video or Image Preview (If Uploaded) -->
+                <video v-if="isVideo" class="img-fluid " controls autoplay muted>
+                    <source v-if="isVideo" :src="fileUrl" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <img v-if="isImage" :src="fileUrl" class="w-75 mx-3" alt="img" />
+
+                <!-- A line above the buttons (copying tweeter) -->
                 <p v-if="selected" class="text-primary fw-bold mx-3 p-2 mb-1" :class="selected ? 'selected' : ''"><i
                         class="bi bi-globe" style="margin-right: 5px;"></i>Everyone can reply</p>
-                <input type="file" id="actual-btn" @change="uploadFile" accept="image/jpeg/png" hidden />
+
+                <!-- Hidden input  -->
+                <input type="file" id="actual-btn" @change="onChange"
+                    accept="image/jpeg,image/png,image/jpg,video/mp4,video/x-m4v,video/*" hidden />
+
+                <!-- Buttons (Only Upload Image/Videos implemented) -->
                 <div class="d-flex justify-content-end px-3 pb-3">
                     <IconFormFileUpload :class="iconImg" />
                     <span class="iButton" data-title="Gif"><i class="bi h6 text-primary"><svg
@@ -78,11 +105,11 @@ const submit = async () => {
                             </svg></i></span>
                     <IconForm :class="iconPoll" data-title="Poll" />
                     <IconForm :class="iconEmoji" data-title="Emoji" />
-                    <IconForm :class="iconCalandar" data-title="Schedule" class="d-none d-sm-inline" />
+                    <IconForm :class="iconCalendar" data-title="Schedule" class="d-none d-sm-inline" />
                     <IconForm :class="iconLocation" data-title="Location" class="d-none d-sm-inline" />
                     <i class="post"></i>
-                    <button class="btn btn-primary rounded-pill px-3 py-1 mt-1 "><strong>Post</strong></button>
-
+                    <button type="submit"
+                        class="btn btn-primary rounded-pill px-3 py-1 mt-1 "><strong>Post</strong></button>
                 </div>
             </form>
         </div>

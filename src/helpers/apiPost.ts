@@ -6,10 +6,10 @@ interface Params {
     method: string
 }
 const postConfig: Params = {
-    baseUrl: "https://jsonplaceholder.typicode.com/",
+    baseUrl: "http://127.0.0.1:8000/api",
     headers: {
-        "Authorization": "",
-            },
+        'content-type': 'multipart/form-data'
+    },
     method: 'post'
 }
 
@@ -19,13 +19,13 @@ export const postAPI = async (url: string, data: any): Promise<any> => {
         url: `${postConfig.baseUrl}/${url}`,
         data
     }).then((response) => {
-        console.log(response)
+        console.log("Success response:", response)
         return {
             status: response.status,
             data: response.data
         }
     }).catch((error) => {
-        console.log(error)
+        console.log('Error: ', error)
         return {
             status: error.status,
             data: error.response
