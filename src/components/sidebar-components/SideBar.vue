@@ -1,6 +1,19 @@
 <script setup lang="ts">
 import SideBarItem from './SideBarItem.vue';
 import TwitterIcon from './icons/TwitterIcon.vue';
+import { useStore } from 'vuex'
+import { computed, type ComputedRef } from 'vue'
+
+type User = {
+    id?: number;
+    name: string;
+    userName: string;
+    email: string;
+    password: string;
+    password_confirmation: string
+    accessToken?: string;
+    exists?: boolean;
+}
 
 const iconHome: string = 'bi-house-door-fill';
 const iconSearch: string = 'bi-search';
@@ -13,22 +26,24 @@ const iconPremium: string = 'bi-twitter'
 const iconProfile: string = 'bi-person'
 const iconMore: string = 'bi-three-dots'
 
+const store = useStore();
+const user: ComputedRef<User> = computed(() => store.state.auth.user);
+console.log("User From store : ", user.value)
 
-/* defineProps<{
-  
-}>()
- */
+const onLogout = () => {
+    store.dispatch("auth/logout", user.value)
+}
 </script>
 
 <template>
     <div class="container-fluid">
         <div class="row flex-nowrap">
-            <div class="col-2 col-md-2 col-lg-2 col-xl-3 col-xxl-3 bg-black custom-border-right column ">
+            <div class="col-2 col-md-2 col-lg-2 col-xl-3 col-xxl-4 bg-black custom-border-right column">
                 <div class="d-flex flex-column align-items-center align-items-sm-end min-vh-100">
 
                     <!-- Sidebar Icons -->
-                    
-                    <ul class="nav flex-column align-items-center align-items-sm-end" id="menu">
+
+                    <ul class="nav flex-column  align-items-baseline  align-items-sm-end m-0 pt-1 p-2 p-lg-3 pt-lg-1" id="menu">
                         <TwitterIcon />
                         <SideBarItem :iconName="iconHome" />
                         <SideBarItem :iconName="iconSearch" />
@@ -47,21 +62,22 @@ const iconMore: string = 'bi-three-dots'
                     <!-- User Icon and Name with Dropdown -->
                     <div class="dropdown pb-3">
                         <a href="#"
-                            class="d-flex align-items-center text-white btn btn btn-outline-secondary border-0 rounded-pill outline-none "
+                            class="d-flex align-items-center text-white btn btn-outline-secondary border-0 rounded-pill outline-none "
                             id="dropdownUser1" data-bs-toggle="dropdown">
                             <img src="https://github.com/mdo.png" alt="avatar" width="40" height="40"
                                 class="rounded-circle">
                             <span class="d-none d-xl-inline mx-1">
                                 <p class="mb-0">
-                                    <strong>Nejc Robič</strong>
+                                    <strong>{{ user.name }}</strong>
                                 </p>
-                                <p class="my-0"><small>@NejcRobic</small></p>
+                                <p class="my-0"><small>@{{ user.userName }}</small></p>
                             </span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-dark rounded border" style="background-color: rgb(5, 0, 0);">
+                        <ul class="dropdown-menu dropdown-menu-dark rounded border p-0" style="background-color: rgb(5, 0, 0);">
                             <li><a class="dropdown-item btn btn-dark p-3 px-5 text-left" href="#">Add an existing account
                                 </a></li>
-                            <li><a class="dropdown-item btn btn-dark p-3 px-5 text-left" href="#">Logout @NejcRobic</a></li>
+                            <li><a class="dropdown-item btn btn-dark p-3 px-5 text-left" @click="onLogout">Logout
+                                    @{{ user.userName }}</a></li>
                         </ul>
                     </div>
                 </div>
@@ -81,5 +97,28 @@ const iconMore: string = 'bi-three-dots'
 <style scoped>
 .custom-border-right {
     border-right: thin solid rgb(46, 45, 45);
+    min-width: 70px;
+    overflow: visible;
+}
+
+.dropdown-menu {
+    position: absolute;
+    z-index: 1000;
+    min-width: 160px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/* Ensure the dropdown arrow indicator fits properly */
+.dropdown-menu::after {
+    display: none;
+}
+
+
+.custom-border-right .dropdown-menu {
+    right: 0;
+    left: auto;
+    transform: translateX(calc(-100% + 15px));
+    /* Adjust the value as needed */
 }
 </style>

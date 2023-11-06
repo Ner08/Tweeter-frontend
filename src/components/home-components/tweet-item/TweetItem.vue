@@ -20,7 +20,7 @@ export interface Tweet {
     updated_at: Date
     createdAgo: string
     message: string
-    img?: string
+    file?: string
     user_id: number
     shareUrl?: string
     like: number

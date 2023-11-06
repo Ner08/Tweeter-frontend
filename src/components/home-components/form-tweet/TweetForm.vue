@@ -1,18 +1,23 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import IconForm from './IconForm.vue'
-import IconFormFileUpload from './IconFormFileUpload.vue';
-import ProfileIcon from '@/components/other/ProfileIcon.vue';
+import ProfileIcon from '../../other/ProfileIcon.vue';
+import IconFormFileUpload from './IconFormFileUpload.vue'
 import { postAPI } from '../../../helpers/apiPost'
+import { useAutoResizeTextarea } from '../../../composables/resizeTextArea';
+import { useStore } from "vuex"
+
+const store = useStore()
 
 let selected = ref<boolean>(false)
 const isImage = ref<boolean>(false)
-const isVideo = ref<boolean>(false)
 const file = ref<any>(null);
 const fileUrl = ref<string>("");
 const message = ref<string>("");
-/* const userId = ref<number>(1) */
+const userId = ref<number>(store.state.auth.user.id)
 
+const textarea = ref<any>()
+useAutoResizeTextarea(textarea)
 
 const iconImg: string = 'bi-image';
 const iconPoll: string = 'bi-bar-chart';
@@ -26,17 +31,9 @@ const toggleSelect = () => {
 
 const onChange = (event: any) => {
     toggleSelect();
-    isImage.value = false
-    isVideo.value = false
     file.value = event.target.files[0];
     fileUrl.value = URL.createObjectURL(file.value)
-
-    let fileMime = computed(() => file.value?.type);
-    if (fileMime.value == "image/png" || fileMime.value == "image/jpg" || fileMime.value == "image/jpeg") {
-        isImage.value = true
-    } else if (fileMime.value == "video/mp4" || fileMime.value == "image/x-m4v") {
-        isVideo.value = true
-    }
+    isImage.value = true
 };
 
 const postData = (data: FormData) => postAPI("tweets", data).then(
@@ -44,7 +41,6 @@ const postData = (data: FormData) => postAPI("tweets", data).then(
         if (res.status === 200) {
             file.value = null;
             isImage.value = false;
-            isVideo.value = false;
             fileUrl.value = "";
             message.value = "";
         }
@@ -53,18 +49,16 @@ const postData = (data: FormData) => postAPI("tweets", data).then(
         }
     }
 )
-
 const submit = async () => {
     let form = new FormData();
     if (isImage.value) {
-        form.append('img', file.value);
+        form.append('file', file.value);
     }
     form.append('message', message.value);
-    form.append('user_id', "1");
-
+    form.append('user_id', `${userId.value}`);
     await postData(form)
-};
 
+};
 </script>
 
 
@@ -76,23 +70,19 @@ const submit = async () => {
                 <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
             </div> -->
             <form enctype="multipart/form-data" @submit.prevent="submit">
-                <textarea @click="toggleSelect" class="d-inline m-2 form-control-lg w-95 rounded-0" rows="1" type="text"
-                    v-model="message" placeholder="What is happening?!"></textarea>
+                <textarea @click="toggleSelect" class="d-inline m-2 auto-resize form-control-lg rounded-0"
+                    style="width: 95%" ref="textarea" rows="1" type="text" v-model="message"
+                    placeholder="What is happening?!"></textarea>
 
-                <!-- Video or Image Preview (If Uploaded) -->
-                <video v-if="isVideo" class="img-fluid " controls autoplay muted>
-                    <source v-if="isVideo" :src="fileUrl" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                <img v-if="isImage" :src="fileUrl" class="w-75 mx-3" alt="img" />
+                <!-- Image Preview (If Uploaded) -->
+                <img v-if="isImage" :src="fileUrl" class="mx-3 rounded-3 videoImage" alt="img" />
 
                 <!-- A line above the buttons (copying tweeter) -->
                 <p v-if="selected" class="text-primary fw-bold mx-3 p-2 mb-1" :class="selected ? 'selected' : ''"><i
                         class="bi bi-globe" style="margin-right: 5px;"></i>Everyone can reply</p>
 
                 <!-- Hidden input  -->
-                <input type="file" id="actual-btn" @change="onChange"
-                    accept="image/jpeg,image/png,image/jpg,video/mp4,video/x-m4v,video/*" hidden />
+                <input type="file" id="actual-btn" @change="onChange" accept="image/jpeg,image/png,image/jpg" hidden />
 
                 <!-- Buttons (Only Upload Image/Videos implemented) -->
                 <div class="d-flex justify-content-end px-3 pb-3">
@@ -140,6 +130,10 @@ textarea {
 
 .uploading-image {
     display: flex;
+}
+
+.videoImage {
+    width: 85%;
 }
 
 .iButton {

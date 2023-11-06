@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import NavTabs from '@/components/home-components/nav-tab/NavTabs.vue';
-import TweetForm from '@/components/home-components/form-create/TweetForm.vue';
+import TweetForm from '@/components/home-components/form-tweet/TweetForm.vue'
 import TweetItems from '@/components/home-components/tweet-item/TweetItems.vue';
 
 </script>

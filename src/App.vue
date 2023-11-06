@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, computed } from 'vue';
+import { computed, type ComputedRef } from 'vue';
 import { useStore } from 'vuex'
 import { RouterView } from 'vue-router'
 import SideBar from './components/sidebar-components/SideBar.vue'
@@ -7,8 +7,7 @@ import RegisterView from './views/RegisterView.vue';
 
 const store = useStore()
 
-const loggedIn = computed(() => store.state.auth.status.loggedIn)
-console.log("logged in ", loggedIn.value) 
+const loggedIn: ComputedRef<boolean> = computed(() => store.state.auth.status.loggedIn);
 
 </script>
 
@@ -16,8 +15,8 @@ console.log("logged in ", loggedIn.value)
   <SideBar v-if="loggedIn">
     <router-view class="flex-shrink-1"></router-view>
   </SideBar>
-  
-  <RegisterView v-if="!loggedIn"/>
+
+  <RegisterView v-if="!loggedIn" />
 </template>
 
 

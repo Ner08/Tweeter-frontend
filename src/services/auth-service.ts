@@ -1,16 +1,17 @@
 import axios, { type AxiosResponse } from 'axios';
+import authHeader from './auth-header';
 
 const API_URL: string = 'http://127.0.0.1:8000/api/users';
 
 type User = {
     id?: number;
-    name: string;
-    username: string;
+    name?: string;
+    username?: string;
     email: string;
     password?: string;
     password_confirmation?: string
     accessToken?: string;
-    exists?:boolean
+    exists?: boolean
 }
 
 
@@ -21,17 +22,20 @@ class AuthService {
                 email: user.email,
                 password: user.password
             });
-        if (response.data.accessToken) {
+        if (response.status == 201) {
             localStorage.setItem('user', JSON.stringify(response.data.user));
+            localStorage.setItem('token', response.data.token);
         }
         return response.data;
     }
 
     async logout(user: User) {
+        console.log("auth-header: ", authHeader(false))
         const response: AxiosResponse = await axios
-            .post(API_URL + '/logout/' + user.id);
+            .get(API_URL + '/logout/' + user.id, { headers: authHeader(false) });
         if (response.status === 200) {
             localStorage.removeItem('user');
+            localStorage.removeItem('token')
         }
         return response.data;
 
@@ -48,9 +52,8 @@ class AuthService {
         if (response.status === 201) {
             console.log('Success Register')
             localStorage.removeItem('user');
-            this.login(user)
         }
-        else{
+        else {
             console.log('response.error')
         }
         return response.data;

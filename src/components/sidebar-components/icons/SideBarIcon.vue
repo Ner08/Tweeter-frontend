@@ -1,18 +1,21 @@
 <script setup lang="ts">
+import { defineProps } from 'vue';
 
-/* defineProps<{
-  icon:String
-}>() */
-
+defineProps({
+  icon: String
+});
 </script>
 
-
 <template>
-    <i class="h3 bi text-light"></i>
+  <i :class="icon + ' h3 bi text-light'"></i>
 </template>
 
 <style scoped>
-i{
-  /* line-height: 0; */
+i {
+  display: flex;
+  align-items: center; 
+  justify-content: center; 
+  width: 100%; 
+  height: 100%; 
 }
 </style>

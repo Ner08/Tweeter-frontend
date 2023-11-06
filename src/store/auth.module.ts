@@ -2,8 +2,8 @@ import AuthService from "../services/auth-service";
 
 type User = {
   id?:number;
-  name: string;
-  username: string;
+  name?: string;
+  username?: string;
   email: string;
   password?: string;
   password_confirmation?: string
@@ -12,9 +12,8 @@ type User = {
 }
 
 const user: User = JSON.parse(localStorage.getItem('user') || '{"exists": false}');
-console.log("user: ", user.exists)
 const initialState = user.exists
-  ? { status: { loggedIn: true }, user }
+  ? { status: { loggedIn: true }, user:user }
   : { status: { loggedIn: false }, user: null }
 
 export const auth = {
@@ -23,9 +22,9 @@ export const auth = {
   actions: {
     login({ commit }: any, user: User) {
       return AuthService.login(user).then(
-        user => {
-          commit('loginSuccess', user);
-          return Promise.resolve(user);
+        data => {
+          commit('loginSuccess', data);
+          return Promise.resolve(data);
         },
         error => {
           commit('loginFailure');
@@ -33,9 +32,16 @@ export const auth = {
         }
       );
     },
-    logout({ commit }: any) {
-      AuthService.logout(user);
-      commit('logout');
+    logout({ commit }: any, user: User) {
+      AuthService.logout(user).then(
+        data => {
+          console.log("Success Logout with data: ", data)
+          commit('logout');
+        },
+        error => {
+          console.log('logout Failure with errors: ', error);
+        }
+      );
     },
     register({ commit }: any, user: User) {
       return AuthService.register(user).then(
@@ -51,9 +57,10 @@ export const auth = {
     }
   },
   mutations: {
-    loginSuccess(state: { status: { loggedIn: boolean; }; user: any; }, user: any) {
+    loginSuccess(state: { status: { loggedIn: boolean; }; user: User; token: User;}, data: any) {
       state.status.loggedIn = true;
-      state.user = user;
+      state.user = data.user;
+      state.token = data.token
     },
     loginFailure(state: { status: { loggedIn: boolean; }; user: null; }) {
       state.status.loggedIn = false;

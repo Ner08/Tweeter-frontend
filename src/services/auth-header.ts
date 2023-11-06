@@ -1,21 +1,21 @@
 type User = {
   id?: number;
-  name: string;
-  username: string;
+  name?: string;
+  username?: string;
   email: string;
   password?: string;
   password_confirmation?: string
   accessToken?: string;
-  exists?:boolean
+  exists?: boolean
 }
 
 export default function authHeader(multiForm: boolean) {
-  const user: User = JSON.parse(localStorage.getItem('user') || '{}');
-
+  const user: User = JSON.parse(localStorage.getItem('user') || '{"exists":false}');
+  const accessToken: string | null = localStorage.getItem('token')
   if (multiForm) {
-    if (user && user.accessToken) {
+    if (user.exists && accessToken !== null) {
       return {
-        Authorization: 'Bearer ' + user.accessToken,
+        Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'multipart/form-data'
       };
     } else {
@@ -23,8 +23,8 @@ export default function authHeader(multiForm: boolean) {
     }
   }
   else {
-    if (user && user.accessToken) {
-      return { Authorization: 'Bearer ' + user.accessToken };
+    if (user.exists && accessToken !== null) {
+      return { Authorization: `Bearer ${accessToken}` };
     } else {
       return {};
     }
