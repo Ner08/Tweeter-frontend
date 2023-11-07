@@ -43,7 +43,7 @@ const onLogout = () => {
 
                     <!-- Sidebar Icons -->
 
-                    <ul class="nav flex-column  align-items-baseline  align-items-sm-end m-0 pt-1 p-2 p-lg-3 pt-lg-1" id="menu">
+                    <ul class="nav flex-column align-items-baseline  align-items-sm-end m-0 pt-1 p-2 p-lg-3 pt-lg-1" id="menu">
                         <TwitterIcon />
                         <SideBarItem :iconName="iconHome" />
                         <SideBarItem :iconName="iconSearch" />
@@ -74,9 +74,7 @@ const onLogout = () => {
                             </span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark rounded border p-0" style="background-color: rgb(5, 0, 0);">
-                            <li><a class="dropdown-item btn btn-dark p-3 px-5 text-left" href="#">Add an existing account
-                                </a></li>
-                            <li><a class="dropdown-item btn btn-dark p-3 px-5 text-left" @click="onLogout">Logout
+                            <li><a class="dropdown-item btn btn-dark py-3 px-0 text-center" @click="onLogout">Logout
                                     @{{ user.userName }}</a></li>
                         </ul>
                     </div>
@@ -98,10 +96,8 @@ const onLogout = () => {
 .custom-border-right {
     border-right: thin solid rgb(46, 45, 45);
     min-width: 70px;
-    overflow: visible;
 }
-
-.dropdown-menu {
+/* .dropdown-menu {
     position: absolute;
     z-index: 1000;
     min-width: 160px;
@@ -110,7 +106,7 @@ const onLogout = () => {
 }
 
 /* Ensure the dropdown arrow indicator fits properly */
-.dropdown-menu::after {
+/* .dropdown-menu::after {
     display: none;
 }
 
@@ -119,6 +115,5 @@ const onLogout = () => {
     right: 0;
     left: auto;
     transform: translateX(calc(-100% + 15px));
-    /* Adjust the value as needed */
-}
+} */ 
 </style>

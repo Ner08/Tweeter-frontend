@@ -13,7 +13,7 @@ const loggedIn: ComputedRef<boolean> = computed(() => store.state.auth.status.lo
 
 <template>
   <SideBar v-if="loggedIn">
-    <router-view class="flex-shrink-1"></router-view>
+    <router-view :key="$route.fullPath" class="flex-shrink-1"></router-view>
   </SideBar>
 
   <RegisterView v-if="!loggedIn" />

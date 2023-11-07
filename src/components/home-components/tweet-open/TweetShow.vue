@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { type PropType } from 'vue'
-import ProfileIcon from '@/components/other/ProfileIcon.vue';
-import TweetItemIcon from './TweetItemIcon.vue';
+import { ref, type PropType } from 'vue'
+import ProfileIcon from '../../other/ProfileIcon.vue'
+import TweetItemIcon from '../../home-components/tweet-item/TweetItemIcon.vue'
+import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
 
 const iconComment: string = "bi bi-chat";
 const iconRetweet: string = "bi bi-arrow-repeat";
@@ -20,6 +22,7 @@ export interface Tweet {
     message?: string
     file?: string
     user_id: number
+    parent_tweet_id?: number
     shareUrl?: string
     like: number
     shares: number
@@ -27,6 +30,8 @@ export interface Tweet {
     numOfComments: number
 }
 
+const store = useStore();
+const route = useRoute();
 const props = defineProps({
     tweet: {
         type: Object as PropType<Tweet>,
@@ -34,13 +39,20 @@ const props = defineProps({
     }
 })
 
+const id = ref<number>(Number(route.params.id))
+console.log("Route params", route.params)
+console.log("Tweet ID : ", props.tweet)
+
+
+
+
 </script>
 
 <!-- Tweet item -->
 
 <template>
-    <router-link class="card rounded-0 bg-black text-white border-dark text-decoration-none " :to="`/tweet/${props.tweet.id}}`">
-        <div class="d-flex">
+    <div class="card rounded-0 bg-black text-white border-dark">
+        <div v-if="tweet" class="d-flex">
             <ProfileIcon />
             <div class="card-body">
                 <span class="card-text">{{ props.tweet.name }}</span>
@@ -65,7 +77,7 @@ const props = defineProps({
                 </div>
             </div>
         </div>
-    </router-link>
+    </div>
 </template>
 
 <style scoped>

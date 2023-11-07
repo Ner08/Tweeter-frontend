@@ -30,6 +30,7 @@
     "@types/bootstrap": "^5.2.8",
     "@types/node": "^18.18.5",
     "@vitejs/plugin-vue": "^4.4.0",
+    "@vue/devtools": "^6.5.1",
     "@vue/eslint-config-prettier": "^8.0.0",
     "@vue/eslint-config-typescript": "^12.0.0",
     "@vue/tsconfig": "^0.4.0",

@@ -1,29 +1,41 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed, type ComputedRef } from 'vue';
 import IconForm from './IconForm.vue'
 import ProfileIcon from '../../other/ProfileIcon.vue';
 import IconFormFileUpload from './IconFormFileUpload.vue'
-import { postAPI } from '../../../helpers/apiPost'
 import { useAutoResizeTextarea } from '../../../composables/resizeTextArea';
 import { useStore } from "vuex"
 
+//Toggle line below textarea 
 const store = useStore()
 
+//Toggle preview image 
 let selected = ref<boolean>(false)
+
+//Toggle preview image 
 const isImage = ref<boolean>(false)
-const file = ref<any>(null);
+//Url blob for image input preview
 const fileUrl = ref<string>("");
+
+//Form fields
+const file = ref<any>(null);
 const message = ref<string>("");
 const userId = ref<number>(store.state.auth.user.id)
 
+//Toggle post button active/disabled
+const isDisabled: ComputedRef<boolean> = computed(() => message.value == "" && file.value === null);
+
+//Text-area auto-resize
 const textarea = ref<any>()
 useAutoResizeTextarea(textarea)
 
+//Icons bootstrap
 const iconImg: string = 'bi-image';
 const iconPoll: string = 'bi-bar-chart';
 const iconEmoji: string = 'bi-emoji-smile';
 const iconCalendar: string = 'bi-calendar-day';
 const iconLocation: string = 'bi-geo-alt';
+
 
 const toggleSelect = () => {
     selected.value = true;
@@ -36,19 +48,25 @@ const onChange = (event: any) => {
     isImage.value = true
 };
 
-const postData = (data: FormData) => postAPI("tweets", data).then(
-    (res) => {
-        if (res.status === 200) {
+const postData = (form: FormData) => {
+    store.dispatch("auth/storeTweets",form).then(
+        data => {
+            console.log("Tweet Stored: ", data)
             file.value = null;
             isImage.value = false;
             fileUrl.value = "";
             message.value = "";
-        }
-        else {
-            console.log("Error: ", res)
-        }
-    }
-)
+        },
+        (error) => {
+            const errorMessage =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString();
+            console.log(errorMessage)
+        });
+}
 const submit = async () => {
     let form = new FormData();
     if (isImage.value) {
@@ -56,7 +74,7 @@ const submit = async () => {
     }
     form.append('message', message.value);
     form.append('user_id', `${userId.value}`);
-    await postData(form)
+    postData(form)
 
 };
 </script>
@@ -98,7 +116,7 @@ const submit = async () => {
                     <IconForm :class="iconCalendar" data-title="Schedule" class="d-none d-sm-inline" />
                     <IconForm :class="iconLocation" data-title="Location" class="d-none d-sm-inline" />
                     <i class="post"></i>
-                    <button type="submit"
+                    <button type="submit" :class="isDisabled ? 'disabled' : 'active'"
                         class="btn btn-primary rounded-pill px-3 py-1 mt-1 "><strong>Post</strong></button>
                 </div>
             </form>

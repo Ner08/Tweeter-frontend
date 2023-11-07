@@ -1,42 +1,47 @@
 <script setup lang="ts">
 import TweetItem from './TweetItem.vue';
-import { getAPI } from '../../../helpers/apiGet'
-import { ref, onMounted } from 'vue';
+import { onMounted, computed, type ComputedRef } from 'vue';
+import { useStore } from 'vuex';
 
-/* type Tweet ={
-    id:number,
-    message:string,
-    name:string,
-    userName:string,
-    file?:string,
-    user_id:number,
-    share_url:string,
-    like:number,
-    numOfComments:string,
-    shares: number,
-	views: number,
-	createdAgo: string,
-	created_at: Date,
-	updated_at: Date
-} */
+export interface Tweet {
+    id: number
+    userName: string
+    name: string
+    created_at: Date
+    updated_at: Date
+    createdAgo: string
+    message?: string
+    file?: string
+    user_id: number
+    shareUrl?: string
+    like: number
+    shares: number
+    views: number
+    numOfComments: number
+}
 
-const tweets = ref<any>();
+const store = useStore()
 
-const getData = () => getAPI("tweets").then(
-    (res) => {
-        if (res.status === 200) {
-            tweets.value = res.data.data;
-            console.log("all tweets:", tweets.value)
-        }
-        else (console.log(res))
-    }
-)
+const tweets: ComputedRef<Array<Tweet>> = computed(() => store.state.auth.tweets)
 
+const getData = () => {
+    store.dispatch("auth/getTweets").then(
+        () => {
+            /* modalLogin.dispose(); */
+        },
+        (error) => {
+            const errorMessage =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString();
+            console.log(errorMessage)
+        });
+}
 onMounted(() => {
     getData()
 })
-
-
 
 </script>
 
