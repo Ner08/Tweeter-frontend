@@ -114,7 +114,7 @@ export const auth = {
         }
       );
     },
-    likeTweet(form: FormData) {
+    likeTweet({ commit }: any, form: FormData): Promise<any> {
       return LikeService.like(form).then(
         response => {
           console.log("Response Like", response);
@@ -126,11 +126,11 @@ export const auth = {
         }
       );
     },
-    unlikeTweet(form: FormData) {
+    unlikeTweet({ commit }: any, form: FormData): Promise<any> {
       return LikeService.unlike(form).then(
         response => {
           console.log("Response Unlike", response);
-          return response;
+          return Promise.resolve(response);
         },
         error => {
           console.log("Error Unlike: ", error)
