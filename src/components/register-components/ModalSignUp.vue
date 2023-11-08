@@ -1,6 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import type { User } from '@/composables/custom-types';
 
+const emit = defineEmits(['register'])
+
+const name = ref<string>("")
+const userName = ref<string>("")
+const email = ref<string>("")
+const password = ref<string>("")
+const password_confirmation = ref<string>("")
 
 const showPassword = ref<boolean>(false)
 const showPasswordConfirmation = ref<boolean>(false)
@@ -13,37 +21,17 @@ const toggleShowPasswordConfirmation: any = () => {
     showPasswordConfirmation.value = !showPasswordConfirmation.value
 }
 
-type User = {
-    id?: number;
-    name: string;
-    username: string;
-    email: string;
-    password?: string;
-    password_confirmation?: string
-    accessToken?: string;
-    exists?:boolean
-}
-
-const name = ref<string>("")
-const userName = ref<string>("")
-const email = ref<string>("")
-const password = ref<string>("")
-const password_confirmation = ref<string>("")
-
-const emit = defineEmits(['register'])
-
 const onSubmit = () => {
     const user: User = {
         name: name.value,
-        username: userName.value,
+        userName: userName.value,
         email: email.value,
         password: password.value,
         password_confirmation: password_confirmation.value,
-        exists:true
+        exists: true
     }
     emit('register', user)
 }
-
 
 </script>
 

@@ -1,27 +1,16 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-
+import type { User } from '@/composables/custom-types';
 
 const showPassword = ref<boolean>(false)
-
-const toggleShowPassword: any = () => {
-    showPassword.value = !showPassword.value
-}
-
-type User = {
-    id?: number;
-    name?: string;
-    username?: string;
-    email: string;
-    password?: string;
-    password_confirmation?: string
-    accessToken?: string;
-    exists?:boolean
-}
 const email = ref<string>("")
 const password = ref<string>("")
 
 const emit = defineEmits(['login'])
+
+const toggleShowPassword: any = () => {
+    showPassword.value = !showPassword.value
+}
 
 const onSubmit = () => {
     const user: User = {

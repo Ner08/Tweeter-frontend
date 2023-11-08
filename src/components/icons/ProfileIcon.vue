@@ -8,6 +8,6 @@
 
 <style scoped>
 img{
-    margin-left: 18px;
+    margin-left: 13px;
 }
 </style>

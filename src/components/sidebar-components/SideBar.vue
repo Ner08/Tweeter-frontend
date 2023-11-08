@@ -3,17 +3,7 @@ import SideBarItem from './SideBarItem.vue';
 import TwitterIcon from './icons/TwitterIcon.vue';
 import { useStore } from 'vuex'
 import { computed, type ComputedRef } from 'vue'
-
-type User = {
-    id?: number;
-    name: string;
-    userName: string;
-    email: string;
-    password: string;
-    password_confirmation: string
-    accessToken?: string;
-    exists?: boolean;
-}
+import type { User } from '@/composables/custom-types';
 
 const iconHome: string = 'bi-house-door-fill';
 const iconSearch: string = 'bi-search';
@@ -43,7 +33,8 @@ const onLogout = () => {
 
                     <!-- Sidebar Icons -->
 
-                    <ul class="nav flex-column align-items-baseline  align-items-sm-end m-0 pt-1 p-2 p-lg-3 pt-lg-1" id="menu">
+                    <ul class="nav flex-column align-items-baseline  align-items-sm-end m-0 pt-1 p-2 p-lg-3 pt-lg-1"
+                        id="menu">
                         <TwitterIcon />
                         <SideBarItem :iconName="iconHome" />
                         <SideBarItem :iconName="iconSearch" />
@@ -60,20 +51,17 @@ const onLogout = () => {
                     <div class="m-auto"></div>
 
                     <!-- User Icon and Name with Dropdown -->
-                    <div class="dropdown pb-3">
-                        <a href="#"
-                            class="d-flex align-items-center text-white btn btn-outline-secondary border-0 rounded-pill outline-none "
-                            id="dropdownUser1" data-bs-toggle="dropdown">
-                            <img src="https://github.com/mdo.png" alt="avatar" width="40" height="40"
-                                class="rounded-circle">
-                            <span class="d-none d-xl-inline mx-1">
-                                <p class="mb-0">
-                                    <strong>{{ user.name }}</strong>
-                                </p>
-                                <p class="my-0"><small>@{{ user.userName }}</small></p>
-                            </span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-dark rounded border p-0" style="background-color: rgb(5, 0, 0);">
+                    <div class="dropdown mb-3 d-flex align-items-center text-white btn btn-outline-secondary border-0 rounded-pill outline-none "
+                        id="dropdownUser1" data-bs-toggle="dropdown">
+                        <img src="https://github.com/mdo.png" alt="avatar" width="40" height="40" class="rounded-circle">
+                        <span class="d-none d-xl-inline mx-1">
+                            <p class="mb-0">
+                                <strong>{{ user.name }}</strong>
+                            </p>
+                            <p class="my-0"><small>@{{ user.userName }}</small></p>
+                        </span>
+                        <ul class="dropdown-menu dropdown-menu-dark rounded border p-0"
+                            style="background-color: rgb(5, 0, 0);">
                             <li><a class="dropdown-item btn btn-dark py-3 px-0 text-center" @click="onLogout">Logout
                                     @{{ user.userName }}</a></li>
                         </ul>
@@ -97,6 +85,7 @@ const onLogout = () => {
     border-right: thin solid rgb(46, 45, 45);
     min-width: 70px;
 }
+
 /* .dropdown-menu {
     position: absolute;
     z-index: 1000;
@@ -115,5 +104,5 @@ const onLogout = () => {
     right: 0;
     left: auto;
     transform: translateX(calc(-100% + 15px));
-} */ 
+} */
 </style>

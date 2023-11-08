@@ -1,13 +1,5 @@
-type User = {
-  id?: number;
-  name?: string;
-  username?: string;
-  email: string;
-  password?: string;
-  password_confirmation?: string
-  accessToken?: string;
-  exists?: boolean
-}
+import type { User } from '@/composables/custom-types';
+
 
 export default function authHeader(multiForm: boolean) {
   const user: User = JSON.parse(localStorage.getItem('user') || '{"exists":false}');

@@ -1,39 +1,14 @@
 import AuthService from "../services/auth-service";
 import TweetService from "@/services/tweet-service";
+import LikeService from "@/services/like-service";
+import type { User, Tweet } from "@/composables/custom-types";
 
-type User = {
-  id?: number;
-  name?: string;
-  username?: string;
-  email: string;
-  password?: string;
-  password_confirmation?: string
-  accessToken?: string;
-  exists?: boolean
-}
-export interface Tweet {
-  id: number
-  userName: string
-  name: string
-  created_at: Date
-  updated_at: Date
-  createdAgo: string
-  message?: string
-  file?: string
-  user_id: number
-  parent_tweet_id?:number
-  shareUrl?: string
-  like: number
-  shares: number
-  views: number
-  numOfComments: number
-}
 
 const user: User = JSON.parse(localStorage.getItem('user') || '{"exists": false}');
 
 const initialState = user.exists
-  ? { status: { loggedIn: true }, user: user }
-  : { status: { loggedIn: false }, user: null }
+  ? { status: { loggedIn: true }, user: user, loading: false }
+  : { status: { loggedIn: false }, user: null, loading: false }
 
 export const auth = {
   namespaced: true,
@@ -87,7 +62,7 @@ export const auth = {
         }
       );
     },
-    getTweet({ commit }: any, id:number) {
+    getTweet({ commit }: any, id: number) {
       return TweetService.getSingleTweet(id).then(
         response => {
           console.log("Response Get Single Tweet: ", response.data)
@@ -96,6 +71,19 @@ export const auth = {
         },
         error => {
           console.log("Error getSingleTweet: ", error)
+          return Promise.reject(error);
+        }
+      );
+    },
+    getComments({ commit }: any, id: number) {
+      return TweetService.getComments(id).then(
+        response => {
+          console.log("Response Get Comments: ", response)
+          commit('getCommentsSuccessful', response);
+          return Promise.resolve(response);
+        },
+        error => {
+          console.log("Error getComments: ", error)
           return Promise.reject(error);
         }
       );
@@ -112,9 +100,52 @@ export const auth = {
           return Promise.reject(error);
         }
       );
+    },
+    storeComment({ commit }: any, form: FormData) {
+      return TweetService.storeTweet(form).then(
+        response => {
+          console.log("Response Store Comment: ", response.tweet)
+          commit('storeCommentSuccess', response.tweet);
+          return Promise.resolve(response);
+        },
+        error => {
+          console.log("Error getComments: ", error)
+          return Promise.reject(error);
+        }
+      );
+    },
+    likeTweet(form: FormData) {
+      return LikeService.like(form).then(
+        response => {
+          console.log("Response Like", response);
+          return Promise.resolve(response);
+        },
+        error => {
+          console.log("Error Like: ", error)
+          return Promise.reject(error);
+        }
+      );
+    },
+    unlikeTweet(form: FormData) {
+      return LikeService.unlike(form).then(
+        response => {
+          console.log("Response Unlike", response);
+          return response;
+        },
+        error => {
+          console.log("Error Unlike: ", error)
+          return Promise.reject(error);
+        }
+      );
     }
   },
   mutations: {
+    setLoading(state: { loading: boolean }) {
+      state.loading = true
+    },
+    stopLoading(state: { loading: boolean }) {
+      state.loading = false
+    },
     loginSuccess(state: { status: { loggedIn: boolean; }; user: User; token: User; }, data: any) {
       state.status.loggedIn = true;
       state.user = data.user;
@@ -137,14 +168,21 @@ export const auth = {
     getTweetsSuccess(state: { tweets: Array<Tweet> }, tweets: Array<Tweet>) {
       state.tweets = tweets;
     },
-    getSingleTweetSuccess(state: { tweet: Tweet }, tweet: Tweet){
+    getSingleTweetSuccess(state: { tweet: Tweet }, tweet: Tweet) {
       state.tweet = tweet;
+    },
+    getCommentsSuccessful(state: { comments: Array<Tweet> }, comments: Array<Tweet>) {
+      state.comments = comments;
     },
     storeTweetsSuccess(state: { tweets: Array<Tweet> }, tweet: Tweet) {
       const newTweetArr: Array<Tweet> = state.tweets;
       newTweetArr.unshift(tweet)
-      console.log("newTweetArr: ", newTweetArr)
-      //Set loader in the future
+      state.tweets = newTweetArr
+    },
+    storeCommentSuccess(state: { comments: Array<Tweet> }, comment: Tweet) {
+      const newCommentArr: Array<Tweet> = state.comments;
+      newCommentArr.unshift(comment)
+      state.comments = newCommentArr
     }
   }
 };

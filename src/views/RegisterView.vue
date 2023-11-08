@@ -3,24 +3,16 @@ import { ref } from 'vue';
 import { useStore } from 'vuex'
 import ModalSignUp from '../components/register-components/ModalSignUp.vue'
 import ModalLogin from '../components/register-components/ModalLogin.vue'
+import type { User } from '@/composables/custom-types';
 /* import 'bootstrap/dist/css/bootstrap.css';
 import { Modal } from 'bootstrap'; */
 
 const store = useStore()
 
-type User = {
-    id?: number;
-    name: string;
-    username: string;
-    email: string;
-    password: string;
-    password_confirmation: string
-    accessToken?: string;
-    exists?:boolean;
-}
-
 const errorMessageRegister = ref<string>("")
 const errorMessageLogin = ref<string>("")
+
+//Have to fix modal not closing dynamically when submit/login successful
 
 /* const elementSignUp = document.getElementById('signupModal') as HTMLElement;
 const modalSignUp = new Modal(elementSignUp); 
